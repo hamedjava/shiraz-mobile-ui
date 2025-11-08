@@ -3,12 +3,13 @@
 // --- وارد کردن کامپوننت‌های UI ---
 import Hero from "@/components/home/Hero";
 import Categories from "@/components/home/Categories";
-// مسیر زیر برای تطابق با ساختار پوشه شما اصلاح شد
 import ProductList from "@/components/features/product/ProductList"; 
+import Advantages from "@/components/home/Advantages";    // جدید: کامپوننت مزایای فروشگاه
+import Brands from "@/components/home/Brands";          // جدید: کامپوننت برندها
+import CallToAction from "@/components/home/CallToAction";  // جدید: کامپوننت فراخوان به اقدام
 
 // --- وارد کردن منطق برنامه ---
 import { ApiProductRepository } from "@/infrastructure/data/api/api-product.repository";
-// مسیرهای زیر برای تطابق با نام پوشه 'use-cases' شما اصلاح شد
 import { GetFeaturedProductsUseCase } from "@/domain/use-cases/get-featured-products.use-case";
 import { GetNewestProductsUseCase } from "@/domain/use-cases/get-newest-products.use-case";
 
@@ -31,7 +32,7 @@ export default async function HomePage() {
 
       <main className="container mx-auto px-4 py-12">
         {/* بخش محصولات ویژه */}
-        <section className="mb-16">
+        <section id="featured-products" className="mb-16">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-text-dark border-b-4 border-primary-yellow pb-2">
               محصولات ویژه
@@ -44,7 +45,7 @@ export default async function HomePage() {
         </section>
 
         {/* بخش جدیدترین محصولات */}
-        <section>
+        <section id="newest-products" className="mb-16">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-text-dark border-b-4 border-primary-yellow pb-2">
               جدیدترین‌ها
@@ -56,6 +57,15 @@ export default async function HomePage() {
           <ProductList products={newestProducts} />
         </section>
       </main>
+
+      {/* بخش مزایای ما */}
+      <Advantages />
+
+      {/* بخش برندها */}
+      <Brands />
+
+      {/* بخش فراخوان به اقدام */}
+      <CallToAction />
     </>
   );
 }
