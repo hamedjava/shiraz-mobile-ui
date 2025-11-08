@@ -1,0 +1,10 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* می‌توانید در اینجا استایل‌های عمومی دیگری اضافه کنید */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
