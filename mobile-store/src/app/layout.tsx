@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header"; // گام ۱: وارد کردن کامپوننت هدر
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer"; // <-- گام ۱: وارد کردن کامپوننت فوتر
 
 const vazirmatn = Vazirmatn({ subsets: ["latin", "arabic"] });
 
@@ -18,16 +19,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      {/* گام ۲: اضافه کردن کلاس‌ها برای چیدمان صحیح */}
       <body className={`${vazirmatn.className} bg-background-light text-text-dark flex flex-col min-h-screen`}>
-        <Header /> {/* گام ۳: قرار دادن کامپوننت هدر در بالای صفحه */}
+        <Header />
         
-        {/* گام ۴: قرار دادن محتوای اصلی در یک div با قابلیت رشد */}
+        {/* محتوای اصلی صفحه که قابلیت رشد دارد */}
         <main className="flex-grow">
           {children}
         </main>
         
-        {/* <Footer /> در آینده فوتر اینجا قرار خواهد گرفت */}
+        <Footer /> {/* <-- گام ۲: قرار دادن کامپوننت فوتر در انتهای صفحه */}
       </body>
     </html>
   );
