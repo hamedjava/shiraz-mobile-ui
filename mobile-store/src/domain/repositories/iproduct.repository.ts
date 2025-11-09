@@ -11,4 +11,6 @@ export interface IProductRepository {
    * لیستی از جدیدترین محصولات اضافه شده به فروشگاه را باز می‌گرداند.
    */
   getNewestProducts(): Promise<Product[]>;
+  getProductsByCategorySlug(slug: string): Promise<Product[]>; 
+
 }

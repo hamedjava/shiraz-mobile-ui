@@ -3,12 +3,13 @@
 import { Product } from "@/domain/entities/product.entity";
 import { IProductRepository } from "@/domain/repositories/iproduct.repository";
 
+// داده‌های mockProducts شما بدون تغییر باقی می‌مانند
 const mockProducts: Product[] = [
+  // ... (تمام محصولات شما در اینجا قرار دارند)
   {
     id: 'prod-001',
     name: 'کاور سیلیکونی اصلی آیفون 15 پرو',
     price: 1350000,
-    // اصلاح شد: استفاده از عکس واقعی کاور آیفون
     imageUrl: '/images/icons and pic/sample-cover-of-iphone.jpg', 
     category: 'کاور و قاب',
     brand: 'اپل',
@@ -20,7 +21,6 @@ const mockProducts: Product[] = [
     id: 'prod-002',
     name: 'گوشی سامسونگ گلکسی S24 Ultra',
     price: 52000000,
-    // اصلاح شد: استفاده از بهترین عکس موجود برای نمایش گوشی/کاور
     imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg', 
     category: 'گوشی موبایل',
     brand: 'سامسونگ',
@@ -32,7 +32,6 @@ const mockProducts: Product[] = [
     id: 'prod-003',
     name: 'پاوربانک 20000 انکر PowerCore',
     price: 2800000,
-    // اصلاح شد: برای پاوربانک از یک عکس باکیفیت به عنوان جایگزین استفاده شد
     imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg', 
     category: 'پاوربانک',
     brand: 'انکر',
@@ -44,7 +43,6 @@ const mockProducts: Product[] = [
     id: 'prod-004',
     name: 'آداپتور 20 وات اورجینال اپل',
     price: 1250000,
-    // اصلاح شد: آیکون حذف شد و یک عکس واقعی از کاور به عنوان جایگزین قرار گرفت
     imageUrl: '/images/icons and pic/mobile-cover.jpg', 
     category: 'شارژر و آداپتور',
     brand: 'اپل',
@@ -56,7 +54,6 @@ const mockProducts: Product[] = [
     id: 'prod-005',
     name: 'کابل 2 متری USB-C به لایتنینگ',
     price: 980000,
-    // اصلاح شد: آیکون حذف شد و یک عکس واقعی از کاور به عنوان جایگزین قرار گرفت
     imageUrl: '/images/icons and pic/mobile-cover.jpg', 
     category: 'کابل و رابط',
     brand: 'اپل',
@@ -68,7 +65,6 @@ const mockProducts: Product[] = [
     id: 'prod-006',
     name: 'گوشی شیائومی 13T Pro',
     price: 29500000,
-    // اصلاح شد: استفاده از بهترین عکس موجود برای نمایش گوشی
     imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg',
     category: 'گوشی موبایل',
     brand: 'شیائومی',
@@ -80,7 +76,6 @@ const mockProducts: Product[] = [
     id: 'prod-007',
     name: 'محافظ صفحه نمایش گلس برای S24',
     price: 450000,
-    // اصلاح شد: تصویر placeholder حذف و با عکس واقعی کاور جایگزین شد
     imageUrl: '/images/icons and pic/samsung-cover.jpg', 
     category: 'محافظ صفحه',
     brand: 'متفرقه',
@@ -89,6 +84,7 @@ const mockProducts: Product[] = [
     isFeatured: false,
   },
 ];
+
 
 export class ApiProductRepository implements IProductRepository {
   async getFeaturedProducts(): Promise<Product[]> {
@@ -101,5 +97,31 @@ export class ApiProductRepository implements IProductRepository {
     await new Promise(resolve => setTimeout(resolve, 50));
     const reversedProducts = [...mockProducts].reverse(); 
     return Promise.resolve(reversedProducts.slice(0, 4));
+  }
+
+  // --- متد جدید ---
+  async getProductsByCategorySlug(slug: string): Promise<Product[]> {
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    // نگاشت slug انگلیسی به نام دسته فارسی
+    const categoryMap: { [key: string]: string } = {
+      'mobiles': 'گوشی موبایل',
+      'covers': 'کاور و قاب',
+      'chargers': 'شارژر و آداپتور',
+      'cables': 'کابل و رابط',
+      'powerbanks': 'پاوربانک',
+      'screen-protectors': 'محافظ صفحه',
+    };
+
+    const categoryName = categoryMap[slug];
+    if (!categoryName) {
+      return []; // اگر slug معتبر نبود، لیست خالی برگردان
+    }
+
+    const filteredProducts = mockProducts.filter(
+      p => p.category === categoryName
+    );
+    
+    return Promise.resolve(filteredProducts);
   }
 }
