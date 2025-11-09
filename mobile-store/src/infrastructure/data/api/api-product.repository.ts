@@ -1,41 +1,105 @@
 // src/infrastructure/data/api/api-product.repository.ts
+
 import { Product } from "@/domain/entities/product.entity";
 import { IProductRepository } from "@/domain/repositories/iproduct.repository";
 
-// این کلاس فعلاً داده‌های Mock را برای شبیه‌سازی یک API واقعی فراهم می‌کند.
-export class ApiProductRepository implements IProductRepository {
-  
-  // منبع داده‌های ثابت ما برای تست
-  private readonly mockProducts: Product[] = [
-    { id: 1, name: "شارژر دیواری ۲۰ وات اپل", price: 1200000, imageUrl: "/images/charger.jpg", rating: 4.8, reviewCount: 152 },
-    { id: 2, name: "کابل تبدیل USB-C به لایتنینگ ۱ متری", price: 850000, imageUrl: "/images/cable.jpg", rating: 4.7, reviewCount: 210 },
-    { id: 3, name: "پاوربانک ۲۰۰۰۰ میلی‌آمپر انکر", price: 2500000, imageUrl: "/images/powerbank.jpg", rating: 4.9, reviewCount: 340 },
-    { id: 4, name: "هندزفری بی‌سیم Galaxy Buds 2", price: 3100000, imageUrl: "/images/headphone.jpg", rating: 4.6, reviewCount: 188 },
-    { id: 5, name: "قاب سیلیکونی آیفون 13", price: 450000, imageUrl: "/images/case.jpg", rating: 4.9, reviewCount: 450 },
-    { id: 6, name: "محافظ صفحه نمایش گلس تمام صفحه", price: 250000, imageUrl: "/images/glass.jpg", rating: 4.5, reviewCount: 312 },
-  ];
+const mockProducts: Product[] = [
+  {
+    id: 'prod-001',
+    name: 'کاور سیلیکونی اصلی آیفون 15 پرو',
+    price: 1350000,
+    // اصلاح شد: استفاده از عکس واقعی کاور آیفون
+    imageUrl: '/images/icons and pic/sample-cover-of-iphone.jpg', 
+    category: 'کاور و قاب',
+    brand: 'اپل',
+    rating: 4.8,
+    reviewCount: 125,
+    isFeatured: true,
+  },
+  {
+    id: 'prod-002',
+    name: 'گوشی سامسونگ گلکسی S24 Ultra',
+    price: 52000000,
+    // اصلاح شد: استفاده از بهترین عکس موجود برای نمایش گوشی/کاور
+    imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg', 
+    category: 'گوشی موبایل',
+    brand: 'سامسونگ',
+    rating: 4.9,
+    reviewCount: 250,
+    isFeatured: true,
+  },
+  {
+    id: 'prod-003',
+    name: 'پاوربانک 20000 انکر PowerCore',
+    price: 2800000,
+    // اصلاح شد: برای پاوربانک از یک عکس باکیفیت به عنوان جایگزین استفاده شد
+    imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg', 
+    category: 'پاوربانک',
+    brand: 'انکر',
+    rating: 4.7,
+    reviewCount: 185,
+    isFeatured: true,
+  },
+  {
+    id: 'prod-004',
+    name: 'آداپتور 20 وات اورجینال اپل',
+    price: 1250000,
+    // اصلاح شد: آیکون حذف شد و یک عکس واقعی از کاور به عنوان جایگزین قرار گرفت
+    imageUrl: '/images/icons and pic/mobile-cover.jpg', 
+    category: 'شارژر و آداپتور',
+    brand: 'اپل',
+    rating: 4.9,
+    reviewCount: 310,
+    isFeatured: true,
+  },
+  {
+    id: 'prod-005',
+    name: 'کابل 2 متری USB-C به لایتنینگ',
+    price: 980000,
+    // اصلاح شد: آیکون حذف شد و یک عکس واقعی از کاور به عنوان جایگزین قرار گرفت
+    imageUrl: '/images/icons and pic/mobile-cover.jpg', 
+    category: 'کابل و رابط',
+    brand: 'اپل',
+    rating: 4.6,
+    reviewCount: 95,
+    isFeatured: false, 
+  },
+  {
+    id: 'prod-006',
+    name: 'گوشی شیائومی 13T Pro',
+    price: 29500000,
+    // اصلاح شد: استفاده از بهترین عکس موجود برای نمایش گوشی
+    imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg',
+    category: 'گوشی موبایل',
+    brand: 'شیائومی',
+    rating: 4.5,
+    reviewCount: 150,
+    isFeatured: false,
+  },
+  {
+    id: 'prod-007',
+    name: 'محافظ صفحه نمایش گلس برای S24',
+    price: 450000,
+    // اصلاح شد: تصویر placeholder حذف و با عکس واقعی کاور جایگزین شد
+    imageUrl: '/images/icons and pic/samsung-cover.jpg', 
+    category: 'محافظ صفحه',
+    brand: 'متفرقه',
+    rating: 4.4,
+    reviewCount: 78,
+    isFeatured: false,
+  },
+];
 
-  /**
-   * پیاده‌سازی متد برای دریافت محصولات ویژه.
-   * در دنیای واقعی، اینجا یک درخواست GET به یک endpoint مانند /api/products/featured ارسال می‌شود.
-   */
+export class ApiProductRepository implements IProductRepository {
   async getFeaturedProducts(): Promise<Product[]> {
-    // شبیه‌سازی یک تاخیر شبکه برای نمایش رفتار async
     await new Promise(resolve => setTimeout(resolve, 50)); 
-    // برگرداندن ۴ محصول اول به عنوان ویژه
-    return Promise.resolve(this.mockProducts.slice(0, 4));
+    const featured = mockProducts.filter(p => p.isFeatured);
+    return Promise.resolve(featured);
   }
 
-  /**
-   * پیاده‌سازی متد برای دریافت جدیدترین محصولات.
-   * در دنیای واقعی، اینجا یک درخواست GET به یک endpoint مانند /api/products?sort=newest ارسال می‌شود.
-   */
   async getNewestProducts(): Promise<Product[]> {
-    // شبیه‌سازی یک تاخیر شبکه
     await new Promise(resolve => setTimeout(resolve, 50));
-    // برای ایجاد تفاوت، ترتیب محصولات را معکوس می‌کنیم تا به عنوان "جدیدترین" نمایش داده شوند.
-    // استفاده از [...array] یک کپی از آرایه ایجاد می‌کند تا آرایه اصلی دستکاری نشود.
-    const reversedProducts = [...this.mockProducts].reverse();
+    const reversedProducts = [...mockProducts].reverse(); 
     return Promise.resolve(reversedProducts.slice(0, 4));
   }
 }

@@ -1,40 +1,37 @@
 // src/components/home/Brands.tsx
 
-import React from 'react';
 import Image from 'next/image';
+import { Brand } from '@/domain/entities/brand.entity'; // ۱. وارد کردن Entity برند
 
-const brandLogos = [
-  { name: 'Apple', src: '/brands/apple.svg', width: 100, height: 40 },
-  { name: 'Samsung', src: '/brands/samsung.svg', width: 120, height: 40 },
-  { name: 'Xiaomi', src: '/brands/xiaomi.svg', width: 100, height: 40 },
-  { name: 'Huawei', src: '/brands/huawei.svg', width: 110, height: 40 },
-  { name: 'Anker', src: '/brands/anker.svg', width: 100, height: 40 },
-];
+// ۲. تعریف اینترفیس برای props
+interface BrandsProps {
+  brands: Brand[];
+}
 
-const Brands = () => {
+// ۳. تعریف کامپوننت که props را دریافت می‌کند و export می‌شود
+export default function Brands({ brands }: BrandsProps) {
   return (
-    <section className="py-12 bg-background">
+    <section className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center text-text-dark mb-8">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-10">
           برندهای معتبر
         </h2>
-        <div className="flex justify-center items-center gap-x-8 md:gap-x-16 flex-wrap">
-          {brandLogos.map((brand) => (
-            <div key={brand.name} className="p-4">
-              {/* نکته: شما باید فایل‌های SVG لوگوها را در پوشه public/brands قرار دهید */}
-              <Image
-                src={brand.src}
-                alt={`${brand.name} Logo`}
-                width={brand.width}
-                height={brand.height}
-                className="opacity-60 hover:opacity-100 transition-opacity duration-300"
-              />
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 items-center">
+          {/* ۴. استفاده از داده‌های داینامیک brands */}
+          {brands.map((brand) => (
+            <div key={brand.id} className="flex justify-center grayscale hover:grayscale-0 transition-all duration-300">
+              <div className="relative w-28 h-12">
+                <Image
+                  src={brand.logoUrl}
+                  alt={brand.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default Brands;
+}
