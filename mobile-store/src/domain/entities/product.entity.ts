@@ -1,13 +1,18 @@
 // src/domain/entities/product.entity.ts
+
 export type Product = {
-  id: string; // بهتر است string باشد برای شناسه‌های منحصر به فرد آینده (UUID)
+  id: string;
   name: string;
   price: number;
-  imageUrl: string;
+  image: string; // نام 'imageUrl' به 'image' برای سادگی و هماهنگی با قبل تغییر کرد
   rating: number;
   reviewCount: number;
-  // فیلدهای ضروری برای یک محصول واقعی
-  category: string;
-  brand: string;
+  
+  // *** تغییر کلیدی ***
+  // به جای نام فارسی، از یک شناسه ثابت (slug) استفاده می‌کنیم.
+  categorySlug: string; 
+  
+  brand: string; // نام برند می‌تواند به صورت رشته باقی بماند چون کمتر تغییر می‌کند
   isFeatured: boolean;
+  description: string; // این فیلد برای صفحه جزئیات محصول ضروری است، اضافه شد
 };

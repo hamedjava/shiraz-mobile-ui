@@ -3,125 +3,108 @@
 import { Product } from "@/domain/entities/product.entity";
 import { IProductRepository } from "@/domain/repositories/iproduct.repository";
 
-// داده‌های mockProducts شما بدون تغییر باقی می‌مانند
+// داده‌های mock بر اساس مدل جدید و مسیرهای صحیح تصاویر به‌روزرسانی شدند
 const mockProducts: Product[] = [
-  // ... (تمام محصولات شما در اینجا قرار دارند)
   {
     id: 'prod-001',
     name: 'کاور سیلیکونی اصلی آیفون 15 پرو',
     price: 1350000,
-    imageUrl: '/images/icons and pic/sample-cover-of-iphone.jpg', 
-    category: 'کاور و قاب',
+    // *** اصلاح مسیر بر اساس ساختار پوشه public ***
+    image: '/images/icons and pic/sample-cover-of-iphone.jpg', 
+    categorySlug: 'covers',
     brand: 'اپل',
     rating: 4.8,
     reviewCount: 125,
     isFeatured: true,
+    description: 'این کاور سیلیکونی با طراحی اپل، به خوبی به دکمه‌ها و خمیدگی‌های آیفون شما می‌نشیند و از آن در برابر خط و خش محافظت می‌کند.'
   },
   {
     id: 'prod-002',
     name: 'گوشی سامسونگ گلکسی S24 Ultra',
     price: 52000000,
-    imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg', 
-    category: 'گوشی موبایل',
+    // *** اصلاح مسیر بر اساس ساختار پوشه public ***
+    image: '/images/icons and pic/sample-of-samsung.jpg', 
+    categorySlug: 'mobiles',
     brand: 'سامسونگ',
     rating: 4.9,
     reviewCount: 250,
     isFeatured: true,
+    description: 'پرچمدار جدید سامسونگ با دوربین فوق‌العاده و قلم S-Pen. تجربه‌ای بی‌نظیر از تکنولوژی در دستان شما.'
   },
   {
     id: 'prod-003',
-    name: 'پاوربانک 20000 انکر PowerCore',
-    price: 2800000,
-    imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg', 
-    category: 'پاوربانک',
-    brand: 'انکر',
+    name: 'آداپتور شارژ سریع 20 وات اپل',
+    price: 980000,
+    // *** اصلاح مسیر بر اساس ساختار پوشه public ***
+    image: '/images/icons and pic/mobile-adaptor.png', 
+    categorySlug: 'accessories',
+    brand: 'اپل',
     rating: 4.7,
-    reviewCount: 185,
-    isFeatured: true,
+    reviewCount: 310,
+    isFeatured: false,
+    description: 'شارژر دیواری اپل با توان ۲۰ وات، دستگاه شما را با سرعت بالا و به صورت ایمن شارژ می‌کند.'
   },
   {
     id: 'prod-004',
-    name: 'آداپتور 20 وات اورجینال اپل',
-    price: 1250000,
-    imageUrl: '/images/icons and pic/mobile-cover.jpg', 
-    category: 'شارژر و آداپتور',
-    brand: 'اپل',
-    rating: 4.9,
-    reviewCount: 310,
+    name: 'گوشی موبایل وان‌پلاس 12',
+    price: 41000000,
+    // *** اصلاح مسیر بر اساس ساختار پوشه public ***
+    image: '/images/icons and pic/sample-one-plus-mobile.jpg', 
+    categorySlug: 'mobiles',
+    brand: 'وان‌پلاس',
+    rating: 4.8,
+    reviewCount: 95,
     isFeatured: true,
+    description: 'تجربه سرعت و روانی بی‌نظیر با پرچمدار جدید وان‌پلاس، مجهز به جدیدترین پردازنده اسنپدراگون.'
   },
   {
     id: 'prod-005',
-    name: 'کابل 2 متری USB-C به لایتنینگ',
-    price: 980000,
-    imageUrl: '/images/icons and pic/mobile-cover.jpg', 
-    category: 'کابل و رابط',
-    brand: 'اپل',
+    name: 'کاور چرمی کلاسیک سامسونگ',
+    price: 850000,
+    // *** اصلاح مسیر بر اساس ساختار پوشه public ***
+    image: '/images/icons and pic/samsung-cover.jpg', 
+    categorySlug: 'covers',
+    brand: 'سامسونگ',
     rating: 4.6,
-    reviewCount: 95,
-    isFeatured: false, 
-  },
-  {
-    id: 'prod-006',
-    name: 'گوشی شیائومی 13T Pro',
-    price: 29500000,
-    imageUrl: '/images/icons and pic/covers-of-moblie-spegne.jpg',
-    category: 'گوشی موبایل',
-    brand: 'شیائومی',
-    rating: 4.5,
-    reviewCount: 150,
-    isFeatured: false,
-  },
-  {
-    id: 'prod-007',
-    name: 'محافظ صفحه نمایش گلس برای S24',
-    price: 450000,
-    imageUrl: '/images/icons and pic/samsung-cover.jpg', 
-    category: 'محافظ صفحه',
-    brand: 'متفرقه',
-    rating: 4.4,
     reviewCount: 78,
     isFeatured: false,
-  },
+    description: 'این کاور با چرم طبیعی، ظاهری شیک و کلاسیک به گوشی شما می‌بخشد و از آن محافظت می‌کند.'
+  }
 ];
 
 
 export class ApiProductRepository implements IProductRepository {
+  
+  private async simulateDelay(ms: number = 50): Promise<void> {
+    await new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    await this.simulateDelay();
+    return Promise.resolve(mockProducts);
+  }
+
+  async getProductById(id: string): Promise<Product | null> {
+    await this.simulateDelay();
+    const product = mockProducts.find(p => p.id === id);
+    return Promise.resolve(product || null);
+  }
+  
+  async getProductsByCategorySlug(slug: string): Promise<Product[]> {
+    await this.simulateDelay();
+    const filteredProducts = mockProducts.filter(p => p.categorySlug === slug);
+    return Promise.resolve(filteredProducts);
+  }
+
   async getFeaturedProducts(): Promise<Product[]> {
-    await new Promise(resolve => setTimeout(resolve, 50)); 
+    await this.simulateDelay();
     const featured = mockProducts.filter(p => p.isFeatured);
     return Promise.resolve(featured);
   }
 
   async getNewestProducts(): Promise<Product[]> {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    const reversedProducts = [...mockProducts].reverse(); 
-    return Promise.resolve(reversedProducts.slice(0, 4));
-  }
-
-  // --- متد جدید ---
-  async getProductsByCategorySlug(slug: string): Promise<Product[]> {
-    await new Promise(resolve => setTimeout(resolve, 50));
-
-    // نگاشت slug انگلیسی به نام دسته فارسی
-    const categoryMap: { [key: string]: string } = {
-      'mobiles': 'گوشی موبایل',
-      'covers': 'کاور و قاب',
-      'chargers': 'شارژر و آداپتور',
-      'cables': 'کابل و رابط',
-      'powerbanks': 'پاوربانک',
-      'screen-protectors': 'محافظ صفحه',
-    };
-
-    const categoryName = categoryMap[slug];
-    if (!categoryName) {
-      return []; // اگر slug معتبر نبود، لیست خالی برگردان
-    }
-
-    const filteredProducts = mockProducts.filter(
-      p => p.category === categoryName
-    );
-    
-    return Promise.resolve(filteredProducts);
+    await this.simulateDelay();
+    const newest = [...mockProducts].reverse().slice(0, 4); 
+    return Promise.resolve(newest);
   }
 }
