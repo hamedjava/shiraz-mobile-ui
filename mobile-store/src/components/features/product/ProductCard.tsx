@@ -1,44 +1,39 @@
 // src/components/ProductCard.tsx
 
-import { Product } from "@/domain/entities/product.entity";
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
+import { ProductViewModel } from '../../../viewmodel/ProductViewModel'; // اطمینان حاصل کنید این مسیر صحیح است
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductViewModel;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link 
-      href={`/products/${product.id}`} // لینک به صفحه جزئیات محصول
-      className="group block overflow-hidden border border-gray-200 rounded-xl hover:shadow-lg transition-shadow duration-300 bg-white"
+      href={product.url} 
+      className="group block w-64 flex-shrink-0 overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-xl"
     >
-      <div className="relative h-[250px] sm:h-[300px] p-4">
+      <div className="relative aspect-square w-full overflow-hidden">
         <Image
-          // استفاده از فیلد صحیح 'image'
-          src={product.image} 
+          src={product.imageUrl}
           alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
+          width={256}
+          height={256}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 
-      <div className="relative p-6 text-center border-t border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors h-14 flex items-center justify-center">
+      <div className="p-4">
+        <h3 className="truncate text-base font-semibold text-gray-800" title={product.name}>
           {product.name}
         </h3>
-        
-        <div className="mt-4">
-          <span className="text-xl font-bold text-gray-900">
-            {product.price.toLocaleString('fa-IR')}
-          </span>
-          <span className="text-sm text-gray-500 mr-1">
-            تومان
-          </span>
-        </div>
+        <p className="mt-2 text-left text-lg font-bold text-blue-600">
+          {product.formattedPrice}
+        </p>
       </div>
     </Link>
   );
-}
+};
+
+export default ProductCard;
