@@ -1,6 +1,7 @@
 // src/domain/entities/brand.entity.ts
+
 export interface Brand {
-  id: string;
+  id: number | string;
   name: string;
-  logoUrl: string; // مسیر لوگو
+  logo: string; // URL or path to the logo image
 }

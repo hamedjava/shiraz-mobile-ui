@@ -5,23 +5,20 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, FreeMode } from 'swiper/modules';
-
 import 'swiper/css';
 import 'swiper/css/free-mode';
 
-const brandsData = [
-    // برای تست، می‌توانید تعداد برندها را کم کنید تا وسط‌چینی را ببینید
-    { name: 'Brand A', logo: '/images/brands/brand-logo-1.svg' },
-    { name: 'Brand B', logo: '/images/brands/brand-logo-2.svg' },
-    { name: "Brand C", logo: "/images/brands/brand-logo-3.svg" },
-    { name: "Brand D", logo: "/images/brands/brand-logo-4.svg" },
-    { name: "Brand E", logo: "/images/brands/brand-logo-5.svg" },
-    { name: "Brand F", logo: "/images/brands/brand-logo-6.svg" },
-    { name: "Brand G", logo: "/images/brands/brand-logo-7.svg" },
-    { name: "Brand H", logo: "/images/brands/brand-logo-8.svg" },
-];
+import { Brand } from '@/domain/entities/brand.entity';
 
-export default function Brands() {
+interface BrandsProps {
+    brands: Brand[];
+}
+
+export default function Brands({ brands }: BrandsProps) {
+    if (!brands || brands.length === 0) {
+        return null;
+    }
+
     return (
         <div className="bg-white py-12">
             <div className="container mx-auto">
@@ -38,30 +35,32 @@ export default function Brands() {
                         freeMode={true}
                         grabCursor={true}
                         slidesPerView="auto"
-                        spaceBetween={80}
+                        spaceBetween={60} // کمی فاصله را کمتر کردم برای زیبایی بیشتر
                         autoplay={{
                             delay: 1,
                             disableOnInteraction: false,
                             pauseOnMouseEnter: true,
                         }}
                         speed={5000}
-                        
-                        // --- راه‌حل نهایی برای وسط‌چینی کامل ---
-                        centerInsufficientSlides={true} // کلیدی: اگر اسلایدها کم باشند، کل گروه را وسط‌چین می‌کند.
-                        // ------------------------------------------
-
-                        className="!px-16 !flex !items-center" // اطمینان از وسط‌چینی عمودی
+                        centerInsufficientSlides={true}
+                        className="!px-16 !flex !items-center"
                     >
-                        {brandsData.map((brand) => (
+                        {brands.map((brand) => (
                             <SwiperSlide 
-                                key={brand.name} 
-                                className="!w-auto flex items-center" // وسط‌چینی عمودی محتوای داخلی هر اسلاید
+                                key={brand.id} 
+                                className="!w-auto" // عرض اسلاید به اندازه محتوای داخلش خواهد بود
                             >
-                                <a href="#" title={brand.name} className="block">
+                                {/* ۱. تغییر کلیدی: تگ 'a' اکنون نقش کانتینر با ابعاد ثابت را دارد */}
+                                <a
+                                    href="#"
+                                    title={brand.name}
+                                    className="flex h-16 w-32 items-center justify-center p-2" // ارتفاع و عرض ثابت + وسط‌چینی
+                                >
+                                    {/* ۲. تگ 'img' اکنون داخل کانتینر فیت می‌شود */}
                                     <img
                                         src={brand.logo}
                                         alt={brand.name}
-                                        className="h-10 w-auto object-contain transition-all duration-300 filter grayscale hover:filter-none"
+                                        className="max-h-full max-w-full object-contain transition-all duration-300 filter grayscale hover:filter-none"
                                     />
                                 </a>
                             </SwiperSlide>
