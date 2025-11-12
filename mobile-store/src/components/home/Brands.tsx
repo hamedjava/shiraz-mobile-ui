@@ -1,37 +1,74 @@
 // src/components/home/Brands.tsx
 
-import Image from 'next/image';
-import { Brand } from '@/domain/entities/brand.entity'; // ۱. وارد کردن Entity برند
+'use client';
 
-// ۲. تعریف اینترفیس برای props
-interface BrandsProps {
-  brands: Brand[];
-}
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, FreeMode } from 'swiper/modules';
 
-// ۳. تعریف کامپوننت که props را دریافت می‌کند و export می‌شود
-export default function Brands({ brands }: BrandsProps) {
-  return (
-    <section className="bg-gray-50 py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-10">
-          برندهای معتبر
-        </h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-8 items-center">
-          {/* ۴. استفاده از داده‌های داینامیک brands */}
-          {brands.map((brand) => (
-            <div key={brand.id} className="flex justify-center grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="relative w-28 h-12">
-                <Image
-                  src={brand.logoUrl}
-                  alt={brand.name}
-                  fill
-                  className="object-contain"
-                />
-              </div>
+import 'swiper/css';
+import 'swiper/css/free-mode';
+
+const brandsData = [
+    // برای تست، می‌توانید تعداد برندها را کم کنید تا وسط‌چینی را ببینید
+    { name: 'Brand A', logo: '/images/brands/brand-logo-1.svg' },
+    { name: 'Brand B', logo: '/images/brands/brand-logo-2.svg' },
+    { name: "Brand C", logo: "/images/brands/brand-logo-3.svg" },
+    { name: "Brand D", logo: "/images/brands/brand-logo-4.svg" },
+    { name: "Brand E", logo: "/images/brands/brand-logo-5.svg" },
+    { name: "Brand F", logo: "/images/brands/brand-logo-6.svg" },
+    { name: "Brand G", logo: "/images/brands/brand-logo-7.svg" },
+    { name: "Brand H", logo: "/images/brands/brand-logo-8.svg" },
+];
+
+export default function Brands() {
+    return (
+        <div className="bg-white py-12">
+            <div className="container mx-auto">
+                <h2 className="mb-8 text-center text-2xl font-bold text-gray-700">
+                    برندهای معتبر
+                </h2>
+                <div className="relative">
+                    <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white"></div>
+                    <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white"></div>
+
+                    <Swiper
+                        modules={[Autoplay, FreeMode]}
+                        loop={true}
+                        freeMode={true}
+                        grabCursor={true}
+                        slidesPerView="auto"
+                        spaceBetween={80}
+                        autoplay={{
+                            delay: 1,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true,
+                        }}
+                        speed={5000}
+                        
+                        // --- راه‌حل نهایی برای وسط‌چینی کامل ---
+                        centerInsufficientSlides={true} // کلیدی: اگر اسلایدها کم باشند، کل گروه را وسط‌چین می‌کند.
+                        // ------------------------------------------
+
+                        className="!px-16 !flex !items-center" // اطمینان از وسط‌چینی عمودی
+                    >
+                        {brandsData.map((brand) => (
+                            <SwiperSlide 
+                                key={brand.name} 
+                                className="!w-auto flex items-center" // وسط‌چینی عمودی محتوای داخلی هر اسلاید
+                            >
+                                <a href="#" title={brand.name} className="block">
+                                    <img
+                                        src={brand.logo}
+                                        alt={brand.name}
+                                        className="h-10 w-auto object-contain transition-all duration-300 filter grayscale hover:filter-none"
+                                    />
+                                </a>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
             </div>
-          ))}
         </div>
-      </div>
-    </section>
-  );
+    );
 }
