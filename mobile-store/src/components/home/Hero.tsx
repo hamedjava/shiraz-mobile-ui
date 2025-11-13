@@ -1,33 +1,60 @@
-// src/components/home/Hero.tsx
-import Image from 'next/image';
-import Link from 'next/link';
+// src/components/home/HeroSlider.tsx
 
-export default function Hero() {
+'use client';
+
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import 'swiper/css/effect-fade';
+
+import { Slide } from '@/domain/entities/slide.entity';
+import HeroSlideItem from './HeroSlideItem'; // ✅ کامپوننت جدید را import می‌کنیم
+
+interface HeroSliderProps {
+  slides: Slide[];
+}
+
+export default function HeroSlider({ slides }: HeroSliderProps) {
+  if (!slides || slides.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="relative w-full h-[60vh] min-h-[400px] max-h-[600px] bg-gray-800 text-white flex items-center">
-      {/* تصویر پس‌زمینه */}
-      <Image
-        src="/images/hero-banner.jpg" // شما باید این تصویر را در public/images قرار دهید
-        alt="بنر اصلی فروشگاه"
-        fill
-        className="object-cover object-center opacity-40"
-        priority // باعث لود سریع‌تر تصویر اصلی می‌شود
-      />
-      
-      {/* محتوای روی تصویر */}
-      <div className="relative container mx-auto px-4 z-10 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
-          بهترین‌ها برای گجت شما
-        </h1>
-        <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8 drop-shadow-md">
-          از قاب‌های شیک و مقاوم گرفته تا سریع‌ترین شارژرها، همه چیز برای محافظت و بهبود کارایی دستگاه شما.
-        </p>
-        <Link href="/products">
-          <button className="bg-primary-yellow text-text-dark font-bold py-3 px-8 rounded-lg text-lg hover:bg-yellow-400 transition-transform duration-300 hover:scale-105">
-            مشاهده همه محصولات
-          </button>
-        </Link>
-      </div>
-    </section>
+    <div className="relative w-full h-[60vh] lg:h-[80vh] text-white">
+      <Swiper
+        modules={[Autoplay, Pagination, Navigation, EffectFade]}
+        effect="fade"
+        // ✅ افکت Fade نرم‌تر و حرفه‌ای‌تر
+        fadeEffect={{
+          crossFade: true, 
+        }}
+        loop={true}
+        autoplay={{
+          delay: 6000, // زمان را کمی بیشتر می‌کنیم تا انیمیشن‌ها فرصت نمایش داشته باشند
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        // ✅ این کلاس برای اعمال استایل‌های سفارشی از globals.css ضروری است
+        className="h-full w-full hero-slider" 
+      >
+        {slides.map((slide, index) => (
+          <SwiperSlide key={slide.id}>
+            {/* ✅ استفاده از کامپوننت جداگانه برای هر اسلاید */}
+            <HeroSlideItem 
+              slide={slide} 
+              isFirstSlide={index === 0} // پراپ priority فقط به اسلاید اول داده می‌شود
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 }

@@ -3,7 +3,7 @@
 // --- وارد کردن کامپوننت‌های UI ---
 import Hero from "@/components/home/Hero";
 import Categories from "@/components/home/Categories";
-import ProductCarousel from "@/components/product/ProductCarousel"; // مسیر اصلاح شد
+import ProductCarousel from "@/components/product/ProductCarousel";
 import Brands from "@/components/home/Brands";
 import CallToAction from "@/components/home/CallToAction";
 import Features from "@/components/home/Features";
@@ -12,20 +12,31 @@ import Features from "@/components/home/Features";
 import { ApiProductRepository } from "@/infrastructure/data/api/api-product.repository";
 import { ApiBrandRepository } from "@/infrastructure/data/api/api-brand.repository";
 import { ApiCategoryRepository } from "@/infrastructure/data/api/api-category.repository";
-import { ProductMapper } from "../../mapper/ProductMapper"; // مسیر اصلاح شد
+// ۱. وارد کردن ریپازیتوری اسلایدها
+import { ApiSlideRepository } from "../../infrastructure/data/api/api.slide.repository"; 
+import { ProductMapper } from "../../mapper/ProductMapper";
 
 export default async function HomePage() {
   // --- تزریق وابستگی ---
   const productRepository = new ApiProductRepository();
   const brandRepository = new ApiBrandRepository();
   const categoryRepository = new ApiCategoryRepository();
+  // ۲. ساخت یک نمونه از ریپازیتوری اسلایدها
+  const slideRepository = new ApiSlideRepository();
 
   // --- فراخوانی موازی داده‌ها ---
-  const [featuredProductsEntity, newestProductsEntity, allBrands, allCategories] = await Promise.all([
+  const [
+    featuredProductsEntity, 
+    newestProductsEntity, 
+    allBrands, 
+    allCategories, 
+    allSlides // ۳. اضافه کردن متغیر برای نگهداری داده‌های اسلاید
+  ] = await Promise.all([
     productRepository.getFeaturedProducts(),
     productRepository.getNewestProducts(8),
     brandRepository.getAllBrands(),
     categoryRepository.getAllCategories(),
+    slideRepository.getSlides(), // ۴. فراخوانی متد برای گرفتن اسلایدها
   ]);
 
   // --- تبدیل Entity به ViewModel ---
@@ -34,14 +45,16 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      {/* ۵. پاس دادن داده‌های اسلاید به کامپوننت Hero */}
+      <Hero slides={allSlides} /> 
+      
       <Categories categories={allCategories} />
 
       {/* بخش محصولات ویژه */}
       <section className="container mx-auto px-4 py-12">
         <ProductCarousel 
           title="محصولات ویژه"
-          viewAllUrl="/products/featured" // لینک برای دکمه نمایش همه
+          viewAllUrl="/products/featured"
           products={featuredProductsViewModel}
         />
       </section>
@@ -50,7 +63,7 @@ export default async function HomePage() {
       <section className="container mx-auto px-4 pb-12">
         <ProductCarousel
           title="جدیدترین‌ها"
-          viewAllUrl="/products/newest" // لینک برای دکame نمایش همه
+          viewAllUrl="/products/newest"
           products={newestProductsViewModel}
         />
       </section>

@@ -19,48 +19,64 @@ export default function Brands({ brands }: BrandsProps) {
         return null;
     }
 
-    return (
-        <div className="bg-white py-12">
-            <div className="container mx-auto">
-                <h2 className="mb-8 text-center text-2xl font-bold text-gray-700">
-                    برندهای معتبر
-                </h2>
-                <div className="relative">
-                    <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white"></div>
-                    <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white"></div>
+    // برای حرکت بی‌نهایت و طبیعی، داده‌ها را چند بار تکرار می‌کنیم
+    const extendedBrands = [...brands, ...brands, ...brands];
 
+    return (
+        <div className="bg-white py-16 sm:py-24">
+            <div className="container mx-auto px-4">
+                <div className="mb-12 text-center">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                        مورد اعتماد برترین‌های صنعت
+                    </h2>
+                    <p className="mt-4 max-w-2xl mx-auto text-lg leading-8 text-gray-600">
+                        ما با افتخار با شرکت‌های پیشرو در صنعت همکاری می‌کنیم تا بهترین نتایج را برای شما به ارمغان بیاوریم.
+                    </p>
+                </div>
+
+                {/* 
+                  ✅ کانتینر اصلی که کلاس mask-image را از globals.css دریافت می‌کند.
+                  دیگر نیازی به div های گرادینت جداگانه نیست.
+                */}
+                <div className="brands-fade-carousel">
                     <Swiper
                         modules={[Autoplay, FreeMode]}
                         loop={true}
-                        freeMode={true}
+                        // ✅ پیکربندی FreeMode برای تعامل دوگانه
+                        freeMode={{
+                            enabled: true,
+                            sticky: false, // اجازه می‌دهد اسلایدر آزادانه حرکت کند
+                            momentum: true, // شتاب پس از سوایپ کاربر
+                            momentumRatio: 0.5, // میزان شتاب
+                            momentumVelocityRatio: 0.5,
+                        }}
                         grabCursor={true}
                         slidesPerView="auto"
-                        spaceBetween={60} // کمی فاصله را کمتر کردم برای زیبایی بیشتر
+                        spaceBetween={80} // افزایش فاصله برای زیبایی بیشتر
+                        // ✅ پیکربندی Autoplay برای حرکت آرام و مداوم
                         autoplay={{
-                            delay: 1,
-                            disableOnInteraction: false,
-                            pauseOnMouseEnter: true,
+                            delay: 1, // شروع حرکت تقریباً بلافاصله
+                            disableOnInteraction: false, // مهم: پس از تعامل کاربر، حرکت خودکار ادامه می‌یابد
+                            pauseOnMouseEnter: true, // بهترین تجربه کاربری: توقف با نگه داشتن ماوس
                         }}
-                        speed={5000}
-                        centerInsufficientSlides={true}
-                        className="!px-16 !flex !items-center"
+                        speed={6000} // سرعت حرکت آرام و یکنواخت
+                        className="h-24" // ارتفاع برای جای دادن انیمیشن scale
                     >
-                        {brands.map((brand) => (
-                            <SwiperSlide 
-                                key={brand.id} 
-                                className="!w-auto" // عرض اسلاید به اندازه محتوای داخلش خواهد بود
+                        {extendedBrands.map((brand, index) => (
+                            <SwiperSlide
+                                key={`${brand.id}-${index}`}
+                                style={{ width: 'auto' }} // اجازه می‌دهد عرض هر اسلاید متناسب با محتوا باشد
+                                className="flex items-center"
                             >
-                                {/* ۱. تغییر کلیدی: تگ 'a' اکنون نقش کانتینر با ابعاد ثابت را دارد */}
                                 <a
                                     href="#"
                                     title={brand.name}
-                                    className="flex h-16 w-32 items-center justify-center p-2" // ارتفاع و عرض ثابت + وسط‌چینی
+                                    className="flex h-full w-40 items-center justify-center p-2" // کمی عریض‌تر
                                 >
-                                    {/* ۲. تگ 'img' اکنون داخل کانتینر فیت می‌شود */}
                                     <img
                                         src={brand.logo}
                                         alt={brand.name}
-                                        className="max-h-full max-w-full object-contain transition-all duration-300 filter grayscale hover:filter-none"
+                                        className="max-h-10 w-auto object-contain" // اندازه کمی کوچکتر برای ظرافت بیشتر
                                     />
                                 </a>
                             </SwiperSlide>

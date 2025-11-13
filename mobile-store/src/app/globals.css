@@ -1,12 +1,20 @@
 /* src/app/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
+  /* بهبود رندر فونت‌ها برای خوانایی بهتر */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* 
+  =============================================================
+  == استایل‌های سفارشی Swiper.js برای کاروسل محصولات (مخفی کردن اسکرول‌بار) ==
+  =============================================================
+*/
 
 /* 
   این کلاس‌ها wrapper داخلی Swiper را هدف قرار می‌دهند
@@ -22,4 +30,127 @@ body {
 /* برای مرورگرهای مبتنی بر WebKit (کروم، سافاری، اپرا) */
 .swiper-wrapper::-webkit-scrollbar {
   display: none;
+}
+
+/* 
+  ==================================================================
+  == استایل‌های سفارشی Swiper.js برای Hero Slider (دکمه‌ها و صفحه‌بندی) ==
+  ==================================================================
+*/
+
+/* استایل دکمه‌های Navigation (بعدی و قبلی) */
+/* ما از important! استفاده می‌کنیم تا بر استایل‌های پیش‌فرض Swiper غلبه کنیم. */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #FBBF24 !important; /* رنگ زرد کهربایی (amber-400) */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* افکت هاور برای بزرگنمایی دکمه‌ها */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    transform: scale(1.2);
+}
+
+/* استایل نقطه‌های Pagination (نقطه فعال) */
+.swiper-pagination-bullet-active {
+    background-color: #FBBF24 !important; /* رنگ زرد کهربایی */
+    transform: scale(1.25); /* کمی بزرگتر برای تاکید بیشتر */
+}
+
+/* استایل کلی نقطه‌های Pagination برای کنتراست بهتر */
+.swiper-pagination-bullet {
+    background-color: #ffffff; /* رنگ سفید برای نقطه‌های غیرفعال */
+    opacity: 0.7;
+}
+/* === Professional Hero Slider Styles === */
+
+.hero-slider .swiper-button-prev,
+.hero-slider .swiper-button-next {
+    color: #FBBF24; /* amber-400 */
+}
+
+.hero-slider .swiper-pagination-bullet {
+    background-color: #ffffff;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.hero-slider .swiper-pagination-bullet-active {
+    background-color: #FBBF24; /* amber-400 */
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* 1. Ken Burns Effect: انیمیشن زوم آرام روی تصویر */
+.hero-slider .swiper-slide .object-cover {
+    transition: transform 6s ease-out; /* مدت زمان طولانی برای افکت آرام */
+    transform: scale(1);
+}
+
+.hero-slider .swiper-slide-active .object-cover {
+    transform: scale(1.1); /* در اسلاید فعال، تصویر کمی زوم می‌شود */
+}
+
+/* 2. Content Animation: انیمیشن ورود محتوا */
+.hero-slider .slide-content > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* وقتی اسلاید فعال می‌شود، انیمیشن‌ها اجرا می‌شوند */
+.hero-slider .swiper-slide-active .slide-content > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 3. Staggered Delay: ایجاد تأخیر آبشاری برای محتوا */
+.hero-slider .swiper-slide-active .slide-content > p {
+    transition-delay: 0.2s;
+}
+
+.hero-slider .swiper-slide-active .slide-content > a {
+    transition-delay: 0.4s;
+}
+*/
+.brands-fade-carousel {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 20%, /* ناحیه نمایش کامل لوگوها کمی کوچکتر شد تا fade نرم‌تر باشد */
+    black 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+}
+
+/* 
+  ✅ پیاده‌سازی افکت Grayscale to Color Hover
+*/
+.brands-fade-carousel .swiper-slide a {
+  /* افزودن filter به transition برای انیمیشن نرم */
+  transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  
+  /* ✅ در حالت عادی، لوگوها کاملاً خاکستری و کمی محو هستند */
+  filter: grayscale(100%);
+  opacity: 0.55;
+  
+  /* یک transform کوچک برای ایجاد حس عمق */
+  transform: scale(1);
+}
+
+.brands-fade-carousel .swiper-slide a:hover {
+  /* ✅ در حالت هاور، فیلتر خاکستری حذف شده و لوگو رنگی می‌شود */
+  filter: grayscale(0%);
+  opacity: 1;
+  
+  /* بزرگنمایی در زمان هاور برای تاکید بیشتر */
+  transform: scale(1.1);
 }
